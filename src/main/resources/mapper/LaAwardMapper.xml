@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.winter_vacation_checkin.mapper.LaAwardMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.winter_vacation_checkin.domain.LaAward">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="photo" column="photo" />
+            <result property="type" column="type" />
+            <result property="rightsName" column="rightsName" />
+            <result property="num" column="num" />
+            <result property="isLimit" column="is_limit" />
+            <result property="status" column="status" />
+            <result property="activityId" column="activity_id" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+            <result property="createUser" column="create_user" />
+            <result property="updateUser" column="update_user" />
+            <result property="isDelete" column="is_delete" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,photo,type,rightsName,num,is_limit,
+        status,activity_id,create_time,update_time,create_user,
+        update_user,is_delete
+    </sql>
+    <update id="updateByActivityId">
+        update la_award set is_delete = 1 where activity_id = #{id}
+    </update>
+    <select id="getAwardByNameTypeRightsStatusPage"
+            resultType="com.example.winter_vacation_checkin.vo.AwardDetailVo">
+        select aw.name as name,
+               aw.photo as photo,
+               aw.type as type,
+               aw.rightsName as rights_name,
+               sum(ua.num) as useCount,
+               aw.is_limit as is_limit,
+               aw.status as status,
+               aw.create_time as create_time,
+               aw.update_time as update_time
+        from la_award as aw
+        join la_user_award_record as ua
+        on aw.id = ua.award_id
+        where aw.is_delete = 0 and ua.is_delete = 0
+        <if test="name != null">
+            and aw.name like concat('%',#{name},'%')
+        </if>
+        <if test="type != null">
+            and aw.type = #{type}
+        </if>
+        <if test="rightsName != null">
+            and aw.rights_name like concat('%',#{rightsName},'%')
+        </if>
+        <if test="status != null">
+            and aw.status = status
+        </if>
+        group by aw.id
+    </select>
+    <select id="getByActivityId" resultType="com.example.winter_vacation_checkin.domain.LaAward">
+        select *
+        from la_award
+        where activity_id = #{activityId} and is_delete = 0;
+    </select>
+</mapper>

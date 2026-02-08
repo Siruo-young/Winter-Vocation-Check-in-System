@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.winter_vacation_checkin.mapper.LaActivityMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.winter_vacation_checkin.domain.LaActivity">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="bannerMsg" column="banner_msg" />
+            <result property="coverMsg" column="cover_msg" />
+            <result property="introduceMsg" column="introduce_msg" />
+            <result property="type" column="type" />
+            <result property="days" column="days" />
+            <result property="isLimit" column="is_limit" />
+            <result property="status" column="status" />
+            <result property="remark" column="remark" />
+            <result property="buttonColor" column="button_color" />
+            <result property="backgroundColor" column="background_color" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+            <result property="createUser" column="create_user" />
+            <result property="updateUser" column="update_user" />
+            <result property="isDelete" column="is_delete" />
+            <result property="startTime" column="start_time" />
+            <result property="endTime" column="end_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,banner_msg,cover_msg,introduce_msg,type,days,
+        is_limit,status,remark,button_color,background_color,create_time,
+        update_time,create_user,update_user,is_delete,start_time,
+        end_time
+    </sql>
+    <select id="getByNameTypePage" resultType="com.example.winter_vacation_checkin.vo.ActivityDetailVo">
+        select a.name as activity_name,
+               a.type as activity_type,
+               a.start_time as activity_startTime,
+               a.end_time as activity_endTime,
+               a.is_limit as activity_limit,
+               count(uj.id) as userCounts,
+               a.status as activity_status,
+               a.create_time as activity_createTime,
+               a.update_time as activity_updateTime
+        from la_activity as a
+        join la_user_join as uj
+        on a.id = uj.activity_id
+        where uj.is_delete = 0
+        <if test="name != null">
+            and a.name like concat('%',#{name},'%')
+        </if>
+        <if test="type != null">
+            and a.type = #{type}
+        </if>
+        group by a.id
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.winter_vacation_checkin.mapper.LaUserAwardRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.winter_vacation_checkin.domain.LaUserAwardRecord">
+            <id property="id" column="id" />
+            <result property="userId" column="user_id" />
+            <result property="activityId" column="activity_id" />
+            <result property="awardId" column="award_id" />
+            <result property="num" column="num" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+            <result property="createUser" column="create_user" />
+            <result property="updateUser" column="update_user" />
+            <result property="isDelete" column="is_delete" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,activity_id,award_id,num,create_time,
+        update_time,create_user,update_user,is_delete
+    </sql>
+</mapper>

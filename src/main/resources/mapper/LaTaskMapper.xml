@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.winter_vacation_checkin.mapper.LaTaskMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.winter_vacation_checkin.domain.LaTask">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="photo" column="photo" />
+            <result property="type" column="type" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+            <result property="createUser" column="create_user" />
+            <result property="updateUser" column="update_user" />
+            <result property="isDelete" column="is_delete" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,photo,type,create_time,update_time,
+        create_user,update_user,is_delete
+    </sql>
+    <update id="delById">
+        update la_task set is_delete = 1 where id = #{id}
+    </update>
+    <select id="listTask" resultType="com.example.winter_vacation_checkin.vo.TaskDetailVo">
+        select name,photo,type,create_time,update_time
+        from la_task
+        where is_delete = 0
+        <if test="name != null">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="type != null">
+            and type = #{type}
+        </if>
+    </select>
+</mapper>

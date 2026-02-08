@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.winter_vacation_checkin.mapper.LaUserTaskRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.winter_vacation_checkin.domain.LaUserTaskRecord">
+            <id property="id" column="id" />
+            <result property="userId" column="user_id" />
+            <result property="activityId" column="activity_id" />
+            <result property="taskId" column="task_id" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+            <result property="createUser" column="create_user" />
+            <result property="updateUser" column="update_user" />
+            <result property="isDelete" column="is_delete" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,activity_id,task_id,create_time,update_time,
+        create_user,update_user,is_delete
+    </sql>
+    <select id="UserTasklist" resultType="com.example.winter_vacation_checkin.vo.ActivityDetailVo">
+        select a.name as activity_name,
+               t.name as task_name,
+               u.name as user_name,
+               ut.create_time as create_time,
+               ut.update_time as update_time
+        from la_user_task_record as ut
+        join la_user as u on u.id = ut.user_id
+        join la_activity as a on a.id = ut.activity_id
+        join la_task as t on t.id = ut.task_id
+        where ut.is_delete = 0
+    </select>
+    <select id="getByUserIdandActivityId"
+            resultType="com.example.winter_vacation_checkin.domain.LaUserTaskRecord">
+        select *
+        from la_user_task_record
+        where user_id = #{userId} and activity_id = #{activityId} and is_delete = 0
+    </select>
+    <select id="taskCount" resultType="java.lang.Long">
+        select count(*)
+        from la_user_task_record
+        where user_id = #{userId} and activity_id = #{activityId} and is_delete = 0
+    </select>
+    <select id="totalTaskCount" resultType="java.lang.Long">
+        select count(*)
+        from la_activity_task_relation
+        where activity_id = #{activityId} and is_delete = 0
+    </select>
+</mapper>
