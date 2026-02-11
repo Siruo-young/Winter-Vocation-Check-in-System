@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/miniwechat/activity")
-public class ActivityController {
+public class MiniActivityController {
     @Resource
     private LaActivityService laActivityService;
 
